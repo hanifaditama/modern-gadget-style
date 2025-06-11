@@ -1,7 +1,17 @@
-
 import { ShoppingBag, Star, Shield, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "react-router-dom";
+import WhatsAppButton from "@/components/WhatsAppButton";
+import { 
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
 
 const Index = () => {
   const featuredProducts = [
@@ -62,17 +72,84 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <ShoppingBag className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold text-foreground">TechHub</span>
+              <Link to="/" className="flex items-center space-x-2">
+                <ShoppingBag className="h-8 w-8 text-primary" />
+                <span className="text-xl font-bold text-foreground">TechHub</span>
+              </Link>
             </div>
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">MacBooks</a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Windows</a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">iPhones</a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Support</a>
+            
+            <div className="hidden md:flex items-center">
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <Link to="/catalog">
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                        All Products
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                  
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                        <li>
+                          <Link 
+                            to="/catalog?category=macbook"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">MacBooks</div>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link 
+                            to="/catalog?category=iphone"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">iPhones</div>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link 
+                            to="/catalog?category=windows"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">Windows Laptops</div>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link 
+                            to="/catalog?category=gaming"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">Gaming Laptops</div>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link 
+                            to="/catalog?category=office"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">Office Laptops</div>
+                          </Link>
+                        </li>
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                  
+                  <NavigationMenuItem>
+                    <Link to="/contact">
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                        Contact Us
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
             </div>
-            <Button variant="outline" size="sm">
-              Contact Us
+            
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/contact">Contact Us</Link>
             </Button>
           </div>
         </div>
@@ -91,11 +168,11 @@ const Index = () => {
               Quality guaranteed, service exceptional.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="text-lg px-8 py-3">
-                Shop Now
+              <Button size="lg" className="text-lg px-8 py-3" asChild>
+                <Link to="/catalog">Shop Now</Link>
               </Button>
-              <Button variant="outline" size="lg" className="text-lg px-8 py-3">
-                View Catalog
+              <Button variant="outline" size="lg" className="text-lg px-8 py-3" asChild>
+                <Link to="/catalog">View Catalog</Link>
               </Button>
             </div>
           </div>
@@ -165,6 +242,12 @@ const Index = () => {
               </Card>
             ))}
           </div>
+          
+          <div className="text-center mt-12">
+            <Button size="lg" asChild>
+              <Link to="/catalog">View All Products</Link>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -192,22 +275,63 @@ const Index = () => {
       {/* Footer */}
       <footer className="bg-card border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 mb-4">
-              <ShoppingBag className="h-6 w-6 text-primary" />
-              <span className="text-lg font-bold text-foreground">TechHub</span>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <ShoppingBag className="h-6 w-6 text-primary" />
+                <span className="text-lg font-bold text-foreground">TechHub</span>
+              </div>
+              <p className="text-muted-foreground mb-4">
+                Your trusted partner for premium technology products
+              </p>
             </div>
-            <p className="text-muted-foreground mb-4">
-              Your trusted partner for premium technology products
-            </p>
-            <div className="flex justify-center space-x-6 text-sm text-muted-foreground">
+            
+            <div>
+              <h3 className="font-semibold text-lg mb-3">Products</h3>
+              <ul className="space-y-2">
+                <li><Link to="/catalog?category=macbook" className="text-muted-foreground hover:text-foreground transition-colors">MacBooks</Link></li>
+                <li><Link to="/catalog?category=iphone" className="text-muted-foreground hover:text-foreground transition-colors">iPhones</Link></li>
+                <li><Link to="/catalog?category=windows" className="text-muted-foreground hover:text-foreground transition-colors">Windows Laptops</Link></li>
+                <li><Link to="/catalog?category=gaming" className="text-muted-foreground hover:text-foreground transition-colors">Gaming Laptops</Link></li>
+                <li><Link to="/catalog?category=office" className="text-muted-foreground hover:text-foreground transition-colors">Office Laptops</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold text-lg mb-3">Support</h3>
+              <ul className="space-y-2">
+                <li><Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact Us</Link></li>
+                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">FAQ</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Warranty</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Shipping</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Returns</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold text-lg mb-3">Visit Us</h3>
+              <address className="not-italic text-muted-foreground">
+                <p>123 Tech Street</p>
+                <p>Silicon Valley, CA 94301</p>
+                <p className="mt-2">+1 (555) 123-4567</p>
+                <p>support@techhub.com</p>
+              </address>
+            </div>
+          </div>
+          
+          <div className="border-t border-border mt-12 pt-6 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} TechHub. All rights reserved.</p>
+            <div className="flex space-x-6 text-sm text-muted-foreground mt-4 md:mt-0">
               <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-foreground transition-colors">Contact</a>
+              <a href="#" className="hover:text-foreground transition-colors">Cookie Policy</a>
             </div>
           </div>
         </div>
       </footer>
+      
+      {/* WhatsApp Button */}
+      <WhatsAppButton phoneNumber="15551234567" />
     </div>
   );
 };
