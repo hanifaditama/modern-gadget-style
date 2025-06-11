@@ -1,4 +1,5 @@
-import { ShoppingBag, Star, Shield, Truck } from "lucide-react";
+
+import { ShoppingBag, Shield, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -21,9 +22,8 @@ const Index = () => {
       price: "$2,499",
       originalPrice: "$2,799",
       image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop",
-      rating: 4.9,
-      reviews: 127,
-      badge: "Best Seller"
+      badge: "Best Seller",
+      inStock: true
     },
     {
       id: 2,
@@ -31,9 +31,8 @@ const Index = () => {
       price: "$999",
       originalPrice: "$1,199",
       image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=400&fit=crop",
-      rating: 4.8,
-      reviews: 89,
-      badge: "New"
+      badge: "New",
+      inStock: true
     },
     {
       id: 3,
@@ -41,9 +40,8 @@ const Index = () => {
       price: "$1,799",
       originalPrice: "$1,999",
       image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=400&fit=crop",
-      rating: 4.7,
-      reviews: 56,
-      badge: "Sale"
+      badge: "Sale",
+      inStock: false
     }
   ];
 
@@ -57,13 +55,14 @@ const Index = () => {
       icon: Truck,
       title: "Free Shipping",
       description: "On orders over $500"
-    },
-    {
-      icon: Star,
-      title: "Expert Support",
-      description: "24/7 technical assistance"
     }
   ];
+
+  const handleBuyClick = (productName: string) => {
+    const message = `Hi! I'm interested in buying ${productName}. Can you provide more details?`;
+    const whatsappUrl = `https://wa.me/15551234567?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -82,9 +81,17 @@ const Index = () => {
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
+                    <Link to="/">
+                      <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                        Home
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                  
+                  <NavigationMenuItem>
                     <Link to="/catalog">
                       <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                        All Products
+                        Products
                       </NavigationMenuLink>
                     </Link>
                   </NavigationMenuItem>
@@ -138,9 +145,9 @@ const Index = () => {
                   </NavigationMenuItem>
                   
                   <NavigationMenuItem>
-                    <Link to="/contact">
+                    <Link to="/about">
                       <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                        Contact Us
+                        About Us
                       </NavigationMenuLink>
                     </Link>
                   </NavigationMenuItem>
@@ -208,23 +215,10 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="p-6">
-                    <h3 className="text-xl font-semibold text-foreground mb-2">
+                    <h3 className="text-xl font-semibold text-foreground mb-3">
                       {product.name}
                     </h3>
-                    <div className="flex items-center mb-3">
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i} 
-                            className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-muted'}`} 
-                          />
-                        ))}
-                      </div>
-                      <span className="text-sm text-muted-foreground ml-2">
-                        {product.rating} ({product.reviews} reviews)
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center space-x-2">
                         <span className="text-2xl font-bold text-foreground">
                           {product.price}
@@ -233,8 +227,20 @@ const Index = () => {
                           {product.originalPrice}
                         </span>
                       </div>
-                      <Button size="sm" className="ml-4">
-                        Add to Cart
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <span className={`text-sm font-medium px-2 py-1 rounded ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                          {product.inStock ? 'In Stock' : 'Out of Stock'}
+                        </span>
+                      </div>
+                      <Button 
+                        size="sm" 
+                        className="ml-4"
+                        disabled={!product.inStock}
+                        onClick={() => handleBuyClick(product.name)}
+                      >
+                        Buy
                       </Button>
                     </div>
                   </div>
@@ -254,7 +260,7 @@ const Index = () => {
       {/* Features */}
       <section className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {features.map((feature, index) => (
               <div key={index} className="text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">

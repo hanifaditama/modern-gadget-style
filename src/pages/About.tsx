@@ -1,7 +1,6 @@
-import { ShoppingBag, MapPin, Phone, Mail, MessageCircle } from "lucide-react";
+
+import { ShoppingBag, Award, Users, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { 
@@ -14,28 +13,25 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
-const Contact = () => {
-  const locations = [
+const About = () => {
+  const stats = [
     {
-      id: 1,
-      name: "Main Store",
-      address: "123 Tech Street, Silicon Valley, CA 94301",
-      phone: "+1 (555) 123-4567",
-      email: "store@techhub.com",
-      hours: "Mon-Sat: 10AM - 8PM, Sun: 12PM - 6PM",
-      mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3168.639179300927!2d-122.1430196842772!3d37.4419792798305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fbc96de8dc419%3A0x35165762d6b80a7!2sStanford%20University!5e0!3m2!1sen!2sus!4v1623767667266!5m2!1sen!2sus"
+      icon: Award,
+      title: "5 Years",
+      description: "In business"
     },
     {
-      id: 2,
-      name: "Downtown Branch",
-      address: "456 Urban Center, San Francisco, CA 94105",
-      phone: "+1 (555) 987-6543",
-      email: "downtown@techhub.com",
-      hours: "Mon-Fri: 9AM - 7PM, Sat: 10AM - 6PM, Sun: Closed",
-      mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.0536229852553!2d-122.41941708426773!3d37.77492907976009!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085808c5afe7f79%3A0xdbf78a9033d589!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1623767980276!5m2!1sen!2sus"
+      icon: Users,
+      title: "10,000+",
+      description: "Happy customers"
+    },
+    {
+      icon: Clock,
+      title: "24/7",
+      description: "Customer support"
     }
   ];
-  
+
   // Navigation component
   const Navigation = () => (
     <nav className="border-b border-border bg-card/50 backdrop-blur-md sticky top-0 z-50">
@@ -139,117 +135,108 @@ const Contact = () => {
       <Navigation />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Have questions about our products or need assistance? Reach out to our friendly team or visit one of our store locations.
+        <div className="text-center mb-16">
+          <h1 className="text-4xl font-bold mb-4">About TechHub</h1>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            We are your trusted technology partner, specializing in premium gadgets including MacBooks, 
+            Windows laptops, and iPhones. Our commitment is to provide quality products at unbeatable prices.
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          {stats.map((stat, index) => (
+            <Card key={index} className="text-center">
+              <CardContent className="p-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
+                  <stat.icon className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold text-foreground mb-2">
+                  {stat.title}
+                </h3>
+                <p className="text-muted-foreground">
+                  {stat.description}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           <div>
-            <h2 className="text-2xl font-semibold mb-6">Send Us a Message</h2>
-            <form className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-medium">Name</label>
-                  <Input id="name" placeholder="Your name" />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium">Email</label>
-                  <Input id="email" type="email" placeholder="your@email.com" />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <label htmlFor="subject" className="text-sm font-medium">Subject</label>
-                <Input id="subject" placeholder="How can we help you?" />
-              </div>
-              
-              <div className="space-y-2">
-                <label htmlFor="message" className="text-sm font-medium">Message</label>
-                <Textarea id="message" placeholder="Tell us about your inquiry..." className="min-h-[150px]" />
-              </div>
-              
-              <Button className="w-full sm:w-auto">Send Message</Button>
-            </form>
+            <h2 className="text-3xl font-bold mb-6">Our Story</h2>
+            <div className="space-y-4 text-muted-foreground">
+              <p>
+                Founded in 2019, TechHub began with a simple mission: to make premium technology 
+                accessible to everyone. What started as a small operation has grown into a trusted 
+                retailer serving thousands of customers.
+              </p>
+              <p>
+                We specialize in carefully selected gadgets including the latest MacBooks, 
+                high-performance Windows laptops, and cutting-edge iPhones. Every product we sell 
+                is backed by our commitment to quality and customer satisfaction.
+              </p>
+              <p>
+                Our team of tech enthusiasts works tirelessly to curate the best products and 
+                provide exceptional service to help you find the perfect device for your needs.
+              </p>
+            </div>
           </div>
           
           <div>
-            <h2 className="text-2xl font-semibold mb-6">Contact Information</h2>
-            <div className="space-y-6">
+            <h2 className="text-3xl font-bold mb-6">Why Choose Us?</h2>
+            <div className="space-y-4">
               <div className="flex items-start">
-                <Phone className="w-5 h-5 text-primary mt-1 mr-3" />
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0"></div>
                 <div>
-                  <p className="font-medium">Phone</p>
-                  <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                  <p className="text-muted-foreground">Monday - Friday, 9AM - 6PM</p>
+                  <h3 className="font-semibold mb-1">Quality Guaranteed</h3>
+                  <p className="text-muted-foreground">All our products come with manufacturer warranty and quality assurance.</p>
                 </div>
               </div>
               
               <div className="flex items-start">
-                <Mail className="w-5 h-5 text-primary mt-1 mr-3" />
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0"></div>
                 <div>
-                  <p className="font-medium">Email</p>
-                  <p className="text-muted-foreground">support@techhub.com</p>
-                  <p className="text-muted-foreground">sales@techhub.com</p>
+                  <h3 className="font-semibold mb-1">Competitive Prices</h3>
+                  <p className="text-muted-foreground">We offer the best prices in the market without compromising on quality.</p>
                 </div>
               </div>
               
               <div className="flex items-start">
-                <MessageCircle className="w-5 h-5 text-primary mt-1 mr-3" />
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0"></div>
                 <div>
-                  <p className="font-medium">WhatsApp</p>
-                  <p className="text-muted-foreground">+1 (555) 987-6543</p>
-                  <p className="text-muted-foreground">Chat with us anytime</p>
+                  <h3 className="font-semibold mb-1">Expert Support</h3>
+                  <p className="text-muted-foreground">Our knowledgeable team is here to help you make the right choice.</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                <div>
+                  <h3 className="font-semibold mb-1">Fast Service</h3>
+                  <p className="text-muted-foreground">Quick responses and efficient service to get you what you need.</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        
-        <h2 className="text-2xl font-semibold mb-6">Our Locations</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {locations.map(location => (
-            <Card key={location.id} className="overflow-hidden">
-              <CardContent className="p-0">
-                <div className="h-[300px] w-full">
-                  <iframe
-                    src={location.mapUrl}
-                    className="w-full h-full border-0"
-                    allowFullScreen
-                    loading="lazy"
-                    title={`Map for ${location.name}`}
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2">{location.name}</h3>
-                  <div className="space-y-3">
-                    <div className="flex">
-                      <MapPin className="w-5 h-5 text-primary mr-2 flex-shrink-0" />
-                      <span>{location.address}</span>
-                    </div>
-                    <div className="flex">
-                      <Phone className="w-5 h-5 text-primary mr-2 flex-shrink-0" />
-                      <span>{location.phone}</span>
-                    </div>
-                    <div className="flex">
-                      <Mail className="w-5 h-5 text-primary mr-2 flex-shrink-0" />
-                      <span>{location.email}</span>
-                    </div>
-                    <div>
-                      <p className="font-medium">Opening Hours</p>
-                      <p className="text-muted-foreground">{location.hours}</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+
+        <div className="text-center bg-muted/30 rounded-lg p-8">
+          <h2 className="text-3xl font-bold mb-4">Ready to Find Your Perfect Device?</h2>
+          <p className="text-lg text-muted-foreground mb-6">
+            Browse our collection of premium gadgets or get in touch with our team for personalized recommendations.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" asChild>
+              <Link to="/catalog">Browse Products</Link>
+            </Button>
+            <Button variant="outline" size="lg" asChild>
+              <Link to="/contact">Contact Us</Link>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Contact;
+export default About;

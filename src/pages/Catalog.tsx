@@ -1,11 +1,9 @@
 
 import { useState } from "react";
-import { ShoppingBag, Star, Filter, X } from "lucide-react";
+import { ShoppingBag, Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
 import { 
   NavigationMenu,
@@ -39,10 +37,9 @@ const Catalog = () => {
       price: 2499,
       originalPrice: 2799,
       image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop",
-      rating: 4.9,
-      reviews: 127,
       badge: "Best Seller",
-      category: "macbook"
+      category: "macbook",
+      inStock: true
     },
     {
       id: 2,
@@ -50,10 +47,9 @@ const Catalog = () => {
       price: 999,
       originalPrice: 1199,
       image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=400&fit=crop",
-      rating: 4.8,
-      reviews: 89,
       badge: "New",
-      category: "iphone"
+      category: "iphone",
+      inStock: true
     },
     {
       id: 3,
@@ -61,10 +57,9 @@ const Catalog = () => {
       price: 1799,
       originalPrice: 1999,
       image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=400&fit=crop",
-      rating: 4.7,
-      reviews: 56,
       badge: "Sale",
-      category: "windows"
+      category: "windows",
+      inStock: false
     },
     {
       id: 4,
@@ -72,10 +67,9 @@ const Catalog = () => {
       price: 1999,
       originalPrice: 2199,
       image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&h=400&fit=crop",
-      rating: 4.8,
-      reviews: 75,
       badge: "Gaming",
-      category: "gaming"
+      category: "gaming",
+      inStock: true
     },
     {
       id: 5,
@@ -83,10 +77,9 @@ const Catalog = () => {
       price: 799,
       originalPrice: 899,
       image: "https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=600&h=400&fit=crop",
-      rating: 4.5,
-      reviews: 120,
       badge: "",
-      category: "iphone"
+      category: "iphone",
+      inStock: true
     },
     {
       id: 6,
@@ -94,10 +87,9 @@ const Catalog = () => {
       price: 1299,
       originalPrice: 1499,
       image: "https://images.unsplash.com/photo-1593642634367-d91a135587b5?w=600&h=400&fit=crop",
-      rating: 4.6,
-      reviews: 89,
       badge: "Office",
-      category: "office"
+      category: "office",
+      inStock: false
     },
     {
       id: 7,
@@ -105,10 +97,9 @@ const Catalog = () => {
       price: 999,
       originalPrice: 1199,
       image: "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=600&h=400&fit=crop",
-      rating: 4.7,
-      reviews: 112,
       badge: "Popular",
-      category: "macbook"
+      category: "macbook",
+      inStock: true
     },
     {
       id: 8,
@@ -116,10 +107,9 @@ const Catalog = () => {
       price: 1399,
       originalPrice: 1599,
       image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=400&fit=crop",
-      rating: 4.5,
-      reviews: 78,
       badge: "Office",
-      category: "office"
+      category: "office",
+      inStock: true
     },
     {
       id: 9,
@@ -127,10 +117,9 @@ const Catalog = () => {
       price: 2399,
       originalPrice: 2599,
       image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&h=400&fit=crop",
-      rating: 4.7,
-      reviews: 67,
       badge: "Gaming",
-      category: "gaming"
+      category: "gaming",
+      inStock: true
     }
   ];
 
@@ -140,6 +129,12 @@ const Catalog = () => {
     const priceMatch = product.price >= priceRange[0] && product.price <= priceRange[1];
     return categoryMatch && priceMatch;
   });
+
+  const handleBuyClick = (productName: string) => {
+    const message = `Hi! I'm interested in buying ${productName}. Can you provide more details?`;
+    const whatsappUrl = `https://wa.me/15551234567?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   // Create a Navigation component
   const Navigation = () => (
@@ -157,9 +152,17 @@ const Catalog = () => {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
+                  <Link to="/">
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                      Home
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
                   <Link to="/catalog">
                     <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      All Products
+                      Products
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
@@ -184,9 +187,9 @@ const Catalog = () => {
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <Link to="/contact">
+                  <Link to="/about">
                     <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Contact Us
+                      About Us
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
@@ -336,23 +339,10 @@ const Catalog = () => {
                         )}
                       </div>
                       <div className="p-6">
-                        <h3 className="text-xl font-semibold text-foreground mb-2">
+                        <h3 className="text-xl font-semibold text-foreground mb-3">
                           {product.name}
                         </h3>
-                        <div className="flex items-center mb-3">
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <Star 
-                                key={i} 
-                                className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-muted'}`} 
-                              />
-                            ))}
-                          </div>
-                          <span className="text-sm text-muted-foreground ml-2">
-                            {product.rating} ({product.reviews} reviews)
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center space-x-2">
                             <span className="text-2xl font-bold text-foreground">
                               ${product.price}
@@ -361,8 +351,20 @@ const Catalog = () => {
                               ${product.originalPrice}
                             </span>
                           </div>
-                          <Button size="sm" className="ml-4">
-                            Add to Cart
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <span className={`text-sm font-medium px-2 py-1 rounded ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                              {product.inStock ? 'In Stock' : 'Out of Stock'}
+                            </span>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            className="ml-4"
+                            disabled={!product.inStock}
+                            onClick={() => handleBuyClick(product.name)}
+                          >
+                            Buy
                           </Button>
                         </div>
                       </div>
