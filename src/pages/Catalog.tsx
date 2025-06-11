@@ -4,6 +4,7 @@ import { ShoppingBag, Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { 
   NavigationMenu,
@@ -19,6 +20,8 @@ import { Separator } from "@/components/ui/separator";
 const Catalog = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [priceRange, setPriceRange] = useState<number[]>([0, 3000]);
+  const [minPrice, setMinPrice] = useState<string>("0");
+  const [maxPrice, setMaxPrice] = useState<string>("3000");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   const categories = [
@@ -136,6 +139,18 @@ const Catalog = () => {
     window.open(whatsappUrl, '_blank');
   };
 
+  const handleMarketplaceClick = (productName: string, marketplace: string) => {
+    const message = `Hi! I'm interested in buying ${productName} through ${marketplace}.`;
+    const whatsappUrl = `https://wa.me/15551234567?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handlePriceInputChange = () => {
+    const min = parseInt(minPrice) || 0;
+    const max = parseInt(maxPrice) || 3000;
+    setPriceRange([min, max]);
+  };
+
   // Create a Navigation component
   const Navigation = () => (
     <nav className="border-b border-border bg-card/50 backdrop-blur-md sticky top-0 z-50">
@@ -170,19 +185,18 @@ const Catalog = () => {
                 <NavigationMenuItem>
                   <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    <div className="w-[200px] p-2">
                       {categories.slice(1).map((category) => (
-                        <li key={category.id}>
-                          <Link 
-                            to={`/catalog?category=${category.id}`}
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                            onClick={() => setSelectedCategory(category.id)}
-                          >
-                            <div className="text-sm font-medium leading-none">{category.name}</div>
-                          </Link>
-                        </li>
+                        <Link 
+                          key={category.id}
+                          to={`/catalog?category=${category.id}`}
+                          className="block px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+                          onClick={() => setSelectedCategory(category.id)}
+                        >
+                          {category.name}
+                        </Link>
                       ))}
-                    </ul>
+                    </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 
@@ -238,13 +252,13 @@ const Catalog = () => {
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-sm font-medium mb-3">Categories</h3>
-                    <div className="space-y-2">
+                    <div className="grid grid-cols-1 gap-2">
                       {categories.map((category) => (
                         <Button
                           key={category.id}
                           variant={selectedCategory === category.id ? "default" : "outline"}
                           size="sm"
-                          className="mr-2 mb-2"
+                          className="justify-start"
                           onClick={() => setSelectedCategory(category.id)}
                         >
                           {category.name}
@@ -256,14 +270,40 @@ const Catalog = () => {
                   <div>
                     <h3 className="text-sm font-medium mb-3">Price Range</h3>
                     <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="text-xs text-muted-foreground">Min Price</label>
+                          <Input
+                            type="number"
+                            value={minPrice}
+                            onChange={(e) => setMinPrice(e.target.value)}
+                            onBlur={handlePriceInputChange}
+                            placeholder="Min"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-muted-foreground">Max Price</label>
+                          <Input
+                            type="number"
+                            value={maxPrice}
+                            onChange={(e) => setMaxPrice(e.target.value)}
+                            onBlur={handlePriceInputChange}
+                            placeholder="Max"
+                          />
+                        </div>
+                      </div>
                       <Slider
                         defaultValue={[0, 3000]}
                         max={3000}
                         step={100}
                         value={priceRange}
-                        onValueChange={setPriceRange}
+                        onValueChange={(value) => {
+                          setPriceRange(value);
+                          setMinPrice(value[0].toString());
+                          setMaxPrice(value[1].toString());
+                        }}
                       />
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <span>${priceRange[0]}</span>
                         <span>${priceRange[1]}</span>
                       </div>
@@ -280,13 +320,13 @@ const Catalog = () => {
               <div className="border rounded-lg p-4 space-y-6">
                 <div>
                   <h3 className="text-lg font-medium mb-3">Categories</h3>
-                  <div className="space-y-2">
+                  <div className="grid grid-cols-1 gap-2">
                     {categories.map((category) => (
                       <Button
                         key={category.id}
                         variant={selectedCategory === category.id ? "default" : "outline"}
                         size="sm"
-                        className="mr-2 mb-2"
+                        className="justify-start"
                         onClick={() => setSelectedCategory(category.id)}
                       >
                         {category.name}
@@ -300,14 +340,40 @@ const Catalog = () => {
                 <div>
                   <h3 className="text-lg font-medium mb-3">Price Range</h3>
                   <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="text-xs text-muted-foreground">Min Price</label>
+                        <Input
+                          type="number"
+                          value={minPrice}
+                          onChange={(e) => setMinPrice(e.target.value)}
+                          onBlur={handlePriceInputChange}
+                          placeholder="Min"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-muted-foreground">Max Price</label>
+                        <Input
+                          type="number"
+                          value={maxPrice}
+                          onChange={(e) => setMaxPrice(e.target.value)}
+                          onBlur={handlePriceInputChange}
+                          placeholder="Max"
+                        />
+                      </div>
+                    </div>
                     <Slider
                       defaultValue={[0, 3000]}
                       max={3000}
                       step={100}
                       value={priceRange}
-                      onValueChange={setPriceRange}
+                      onValueChange={(value) => {
+                        setPriceRange(value);
+                        setMinPrice(value[0].toString());
+                        setMaxPrice(value[1].toString());
+                      }}
                     />
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
                       <span>${priceRange[0]}</span>
                       <span>${priceRange[1]}</span>
                     </div>
@@ -342,8 +408,10 @@ const Catalog = () => {
                         <h3 className="text-xl font-semibold text-foreground mb-3">
                           {product.name}
                         </h3>
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center space-x-2">
+                        
+                        {/* Price Section */}
+                        <div className="mb-4">
+                          <div className="flex items-center space-x-2 mb-2">
                             <span className="text-2xl font-bold text-foreground">
                               ${product.price}
                             </span>
@@ -352,20 +420,46 @@ const Catalog = () => {
                             </span>
                           </div>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center">
-                            <span className={`text-sm font-medium px-2 py-1 rounded ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                              {product.inStock ? 'In Stock' : 'Out of Stock'}
-                            </span>
-                          </div>
+                        
+                        {/* Stock Status */}
+                        <div className="mb-4">
+                          <span className={`inline-block text-sm font-medium px-3 py-1 rounded-full ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                            {product.inStock ? 'In Stock' : 'Out of Stock'}
+                          </span>
+                        </div>
+                        
+                        {/* Buy Button */}
+                        <div className="mb-4">
                           <Button 
-                            size="sm" 
-                            className="ml-4"
+                            className="w-full"
                             disabled={!product.inStock}
                             onClick={() => handleBuyClick(product.name)}
                           >
-                            Buy
+                            Buy Now
                           </Button>
+                        </div>
+                        
+                        {/* Marketplace Buttons */}
+                        <div className="space-y-2">
+                          <p className="text-sm text-muted-foreground text-center">Also available at:</p>
+                          <div className="grid grid-cols-2 gap-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              className="text-xs"
+                              onClick={() => handleMarketplaceClick(product.name, 'Tokopedia')}
+                            >
+                              🟢 Tokopedia
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              className="text-xs"
+                              onClick={() => handleMarketplaceClick(product.name, 'Shopee')}
+                            >
+                              🟠 Shopee
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </CardContent>
@@ -380,6 +474,8 @@ const Catalog = () => {
                     onClick={() => {
                       setSelectedCategory("all");
                       setPriceRange([0, 3000]);
+                      setMinPrice("0");
+                      setMaxPrice("3000");
                     }}
                   >
                     Reset Filters

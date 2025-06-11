@@ -1,4 +1,3 @@
-
 import { ShoppingBag, Shield, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -64,6 +63,23 @@ const Index = () => {
     window.open(whatsappUrl, '_blank');
   };
 
+  const marketplaces = [
+    {
+      name: "Tokopedia",
+      logo: "🟢",
+      url: "https://tokopedia.com/yourstorename"
+    },
+    {
+      name: "Shopee",
+      logo: "🟠", 
+      url: "https://shopee.co.id/yourstorename"
+    }
+  ];
+
+  const handleMarketplaceClick = (url: string) => {
+    window.open(url, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -99,48 +115,38 @@ const Index = () => {
                   <NavigationMenuItem>
                     <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                        <li>
-                          <Link 
-                            to="/catalog?category=macbook"
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none">MacBooks</div>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link 
-                            to="/catalog?category=iphone"
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none">iPhones</div>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link 
-                            to="/catalog?category=windows"
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none">Windows Laptops</div>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link 
-                            to="/catalog?category=gaming"
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none">Gaming Laptops</div>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link 
-                            to="/catalog?category=office"
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none">Office Laptops</div>
-                          </Link>
-                        </li>
-                      </ul>
+                      <div className="w-[200px] p-2">
+                        <Link 
+                          to="/catalog?category=macbook"
+                          className="block px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          MacBooks
+                        </Link>
+                        <Link 
+                          to="/catalog?category=iphone"
+                          className="block px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          iPhones
+                        </Link>
+                        <Link 
+                          to="/catalog?category=windows"
+                          className="block px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          Windows Laptops
+                        </Link>
+                        <Link 
+                          to="/catalog?category=gaming"
+                          className="block px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          Gaming Laptops
+                        </Link>
+                        <Link 
+                          to="/catalog?category=office"
+                          className="block px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          Office Laptops
+                        </Link>
+                      </div>
                     </NavigationMenuContent>
                   </NavigationMenuItem>
                   
@@ -273,6 +279,35 @@ const Index = () => {
                   {feature.description}
                 </p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Marketplace Section */}
+      <section className="py-16 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Find Us on Marketplaces
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Shop our products on your favorite marketplace platforms
+            </p>
+          </div>
+          
+          <div className="flex justify-center items-center gap-8">
+            {marketplaces.map((marketplace) => (
+              <Card 
+                key={marketplace.name} 
+                className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                onClick={() => handleMarketplaceClick(marketplace.url)}
+              >
+                <CardContent className="p-8 text-center">
+                  <div className="text-4xl mb-4">{marketplace.logo}</div>
+                  <h3 className="text-xl font-semibold">{marketplace.name}</h3>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
