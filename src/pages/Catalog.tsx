@@ -264,13 +264,13 @@ const Catalog = () => {
 
   const handleBuyClick = (productName: string) => {
     const message = `Hi! I'm interested in buying ${productName}. Can you provide more details?`;
-    const whatsappUrl = `https://wa.me/15551234567?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/+628988030869?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
   const handleMarketplaceClick = (productName: string, marketplace: string) => {
     const message = `Hi! I'm interested in buying ${productName} through ${marketplace}.`;
-    const whatsappUrl = `https://wa.me/15551234567?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/+628988030869?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -705,7 +705,7 @@ const Catalog = () => {
                           {/* Price Section */}
                           <div className="space-y-2">
                             <div className="flex items-center space-x-2">
-                              <span className="text-2xl font-bold text-foreground">
+                              <span className="text-xl font-bold text-foreground">
                                 {formatPrice(product.price)}
                               </span>
                               <span className="text-lg text-muted-foreground line-through">

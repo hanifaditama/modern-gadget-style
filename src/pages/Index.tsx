@@ -18,8 +18,8 @@ const Index = () => {
     {
       id: 1,
       name: "MacBook Pro 16-inch",
-      price: "$2,499",
-      originalPrice: "$2,799",
+      price: "Rp 25,000,000",
+      originalPrice: "Rp 30,000,000",
       image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop",
       badge: "Best Seller",
       inStock: true
@@ -27,8 +27,8 @@ const Index = () => {
     {
       id: 2,
       name: "iPhone 15 Pro",
-      price: "$999",
-      originalPrice: "$1,199",
+      price: "Rp 15,000,000",
+      originalPrice: "Rp 17,000,000",
       image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=400&fit=crop",
       badge: "New",
       inStock: true
@@ -36,8 +36,8 @@ const Index = () => {
     {
       id: 3,
       name: "Surface Laptop Studio",
-      price: "$1,799",
-      originalPrice: "$1,999",
+      price: "Rp 20,000,000",
+      originalPrice: "Rp 22,000,000",
       image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=400&fit=crop",
       badge: "Sale",
       inStock: false
@@ -59,7 +59,7 @@ const Index = () => {
 
   const handleBuyClick = (productName: string) => {
     const message = `Hi! I'm interested in buying ${productName}. Can you provide more details?`;
-    const whatsappUrl = `https://wa.me/15551234567?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/+628988030869?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -372,7 +372,7 @@ const Index = () => {
       </footer>
       
       {/* WhatsApp Button */}
-      <WhatsAppButton phoneNumber="15551234567" />
+      <WhatsAppButton phoneNumber="+628988030869" />
     </div>
   );
 };
