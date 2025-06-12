@@ -1,3 +1,4 @@
+
 import { ShoppingBag, Shield, Truck, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -120,12 +121,12 @@ const Index = () => {
   const marketplaces = [
     {
       name: "Tokopedia",
-      logo: "https://images.tokopedia.net/img/tokopedia-logo.png",
+      logo: "/lovable-uploads/ecc6a3c5-f7ab-48ab-b6ae-d9160c317aa6.png",
       url: "https://tokopedia.com/yourstorename"
     },
     {
       name: "Shopee", 
-      logo: "https://logos-world.net/wp-content/uploads/2020/11/Shopee-Logo.png",
+      logo: "/lovable-uploads/eb83872b-9662-4acb-b949-33bf73d2991a.png",
       url: "https://shopee.co.id/yourstorename"
     }
   ];
@@ -392,19 +393,19 @@ const Index = () => {
                                   <Button 
                                     variant="outline" 
                                     size="sm"
-                                    className="text-xs"
+                                    className="text-sm h-10 px-3"
                                     onClick={() => handleMarketplaceClick(selectedProduct.name, 'Tokopedia')}
                                   >
-                                    <img src="https://images.tokopedia.net/img/tokopedia-logo.png" alt="Tokopedia" className="w-4 h-4 mr-1" />
+                                    <img src="/lovable-uploads/ecc6a3c5-f7ab-48ab-b6ae-d9160c317aa6.png" alt="Tokopedia" className="w-5 h-5 mr-2" />
                                     Tokopedia
                                   </Button>
                                   <Button 
                                     variant="outline" 
                                     size="sm"
-                                    className="text-xs"
+                                    className="text-sm h-10 px-3"
                                     onClick={() => handleMarketplaceClick(selectedProduct.name, 'Shopee')}
                                   >
-                                    <img src="https://logos-world.net/wp-content/uploads/2020/11/Shopee-Logo.png" alt="Shopee" className="w-4 h-4 mr-1" />
+                                    <img src="/lovable-uploads/eb83872b-9662-4acb-b949-33bf73d2991a.png" alt="Shopee" className="w-5 h-5 mr-2" />
                                     Shopee
                                   </Button>
                                 </div>
@@ -474,19 +475,19 @@ const Index = () => {
                           <Button 
                             variant="outline" 
                             size="sm"
-                            className="text-xs h-8"
+                            className="text-sm h-10 px-2"
                             onClick={() => handleMarketplaceClick(product.name, 'Tokopedia')}
                           >
-                            <img src="https://images.tokopedia.net/img/tokopedia-logo.png" alt="Tokopedia" className="w-3 h-3 mr-1" />
+                            <img src="/lovable-uploads/ecc6a3c5-f7ab-48ab-b6ae-d9160c317aa6.png" alt="Tokopedia" className="w-4 h-4 mr-1" />
                             Tokopedia
                           </Button>
                           <Button 
                             variant="outline" 
                             size="sm"
-                            className="text-xs h-8"
+                            className="text-sm h-10 px-2"
                             onClick={() => handleMarketplaceClick(product.name, 'Shopee')}
                           >
-                            <img src="https://logos-world.net/wp-content/uploads/2020/11/Shopee-Logo.png" alt="Shopee" className="w-3 h-3 mr-1" />
+                            <img src="/lovable-uploads/eb83872b-9662-4acb-b949-33bf73d2991a.png" alt="Shopee" className="w-4 h-4 mr-1" />
                             Shopee
                           </Button>
                         </div>
