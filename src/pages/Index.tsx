@@ -1,8 +1,11 @@
-import { ShoppingBag, Shield, Truck } from "lucide-react";
+import { ShoppingBag, Shield, Truck, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { useState } from "react";
 import { 
   NavigationMenu,
   NavigationMenuContent,
@@ -14,33 +17,78 @@ import {
 } from "@/components/ui/navigation-menu";
 
 const Index = () => {
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   const featuredProducts = [
     {
       id: 1,
       name: "MacBook Pro 16-inch",
-      price: "Rp 25,000,000",
-      originalPrice: "Rp 30,000,000",
-      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop",
+      price: 25000000,
+      originalPrice: 30000000,
+      images: [
+        "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1496181133206-80ce9b886505?w=600&h=400&fit=crop"
+      ],
       badge: "Best Seller",
-      inStock: true
+      inStock: true,
+      description: "The most powerful MacBook Pro ever. With the blazing-fast M2 Pro or M2 Max chip — along with up to 22 hours of battery life — MacBook Pro enables creatives, developers, and entrepreneurs to push the boundaries of what's possible.",
+      specifications: {
+        "Processor": "Apple M2 Pro 12-core CPU",
+        "Memory": "16GB unified memory",
+        "Storage": "512GB SSD storage",
+        "Display": "16.2-inch Liquid Retina XDR display",
+        "Graphics": "19-core GPU",
+        "Battery": "Up to 22 hours video playback",
+        "Operating System": "macOS Ventura"
+      }
     },
     {
       id: 2,
       name: "iPhone 15 Pro",
-      price: "Rp 15,000,000",
-      originalPrice: "Rp 17,000,000",
-      image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=400&fit=crop",
+      price: 15000000,
+      originalPrice: 17000000,
+      images: [
+        "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600&h=400&fit=crop"
+      ],
       badge: "New",
-      inStock: true
+      inStock: true,
+      description: "iPhone 15 Pro. Forged in titanium and featuring the groundbreaking A17 Pro chip, a customizable Action Button, and the most powerful iPhone camera system ever.",
+      specifications: {
+        "Chip": "A17 Pro chip",
+        "Display": "6.1-inch Super Retina XDR display",
+        "Camera": "Pro camera system (48MP Main, 12MP Ultra Wide, 12MP Telephoto)",
+        "Storage": "128GB",
+        "Operating System": "iOS 17",
+        "Material": "Titanium with textured matte glass back",
+        "Water Resistance": "Rated IP68"
+      }
     },
     {
       id: 3,
       name: "Surface Laptop Studio",
-      price: "Rp 20,000,000",
-      originalPrice: "Rp 22,000,000",
-      image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=400&fit=crop",
+      price: 20000000,
+      originalPrice: 22000000,
+      images: [
+        "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1593642634367-d91a135587b5?w=600&h=400&fit=crop"
+      ],
       badge: "Sale",
-      inStock: false
+      inStock: false,
+      description: "The Surface Laptop Studio is a versatile device designed for creators and professionals, featuring a unique hinge design and powerful performance.",
+      specifications: {
+        "Processor": "Intel Core i7-11370H",
+        "Memory": "32GB RAM",
+        "Storage": "1TB SSD",
+        "Display": "14.4-inch PixelSense Flow touch display",
+        "Graphics": "NVIDIA GeForce RTX 3050 Ti",
+        "Battery": "Up to 19 hours",
+        "Operating System": "Windows 11 Pro"
+      }
     }
   ];
 
@@ -53,7 +101,7 @@ const Index = () => {
     {
       icon: Truck,
       title: "Free Shipping",
-      description: "On orders over $500"
+      description: "On orders over Rp 5,000,000"
     }
   ];
 
@@ -63,21 +111,47 @@ const Index = () => {
     window.open(whatsappUrl, '_blank');
   };
 
+  const handleMarketplaceClick = (productName: string, marketplace: string) => {
+    const message = `Hi! I'm interested in buying ${productName} through ${marketplace}.`;
+    const whatsappUrl = `https://wa.me/+628988030869?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   const marketplaces = [
     {
       name: "Tokopedia",
-      logo: "🟢",
+      logo: "https://images.tokopedia.net/img/tokopedia-logo.png",
       url: "https://tokopedia.com/yourstorename"
     },
     {
-      name: "Shopee",
-      logo: "🟠", 
+      name: "Shopee", 
+      logo: "https://logos-world.net/wp-content/uploads/2020/11/Shopee-Logo.png",
       url: "https://shopee.co.id/yourstorename"
     }
   ];
 
-  const handleMarketplaceClick = (url: string) => {
-    window.open(url, '_blank');
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    }).format(price);
+  };
+
+  const nextImage = () => {
+    if (selectedProduct) {
+      setCurrentImageIndex((prev) => 
+        prev === selectedProduct.images.length - 1 ? 0 : prev + 1
+      );
+    }
+  };
+
+  const prevImage = () => {
+    if (selectedProduct) {
+      setCurrentImageIndex((prev) => 
+        prev === 0 ? selectedProduct.images.length - 1 : prev - 1
+      );
+    }
   };
 
   return (
@@ -208,46 +282,215 @@ const Index = () => {
             {featuredProducts.map((product) => (
               <Card key={product.id} className="group cursor-pointer border-border hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <CardContent className="p-0">
-                  <div className="relative overflow-hidden rounded-t-lg">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
-                        {product.badge}
-                      </span>
-                    </div>
-                  </div>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <div 
+                        className="relative overflow-hidden rounded-t-lg cursor-pointer"
+                        onClick={() => {
+                          setSelectedProduct(product);
+                          setCurrentImageIndex(0);
+                        }}
+                      >
+                        <img 
+                          src={product.images[0]} 
+                          alt={product.name}
+                          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute top-4 left-4">
+                          <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
+                            {product.badge}
+                          </span>
+                        </div>
+                      </div>
+                    </DialogTrigger>
+                    
+                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle className="text-2xl font-bold">{selectedProduct?.name}</DialogTitle>
+                      </DialogHeader>
+                      
+                      {selectedProduct && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          {/* Image Carousel */}
+                          <div className="relative">
+                            <div className="relative overflow-hidden rounded-lg">
+                              <img 
+                                src={selectedProduct.images[currentImageIndex]} 
+                                alt={selectedProduct.name}
+                                className="w-full h-96 object-cover"
+                              />
+                              
+                              {selectedProduct.images.length > 1 && (
+                                <>
+                                  <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white"
+                                    onClick={prevImage}
+                                  >
+                                    <ChevronLeft className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white"
+                                    onClick={nextImage}
+                                  >
+                                    <ChevronRight className="h-4 w-4" />
+                                  </Button>
+                                </>
+                              )}
+                            </div>
+                            
+                            {/* Image Thumbnails */}
+                            {selectedProduct.images.length > 1 && (
+                              <div className="flex gap-2 mt-4 overflow-x-auto">
+                                {selectedProduct.images.map((image, index) => (
+                                  <img
+                                    key={index}
+                                    src={image}
+                                    alt={`${selectedProduct.name} ${index + 1}`}
+                                    className={`w-16 h-16 object-cover rounded cursor-pointer border-2 ${
+                                      index === currentImageIndex ? 'border-primary' : 'border-gray-200'
+                                    }`}
+                                    onClick={() => setCurrentImageIndex(index)}
+                                  />
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Product Details */}
+                          <div className="space-y-6">
+                            <div>
+                              <div className="flex flex-col space-y-1 mb-4">
+                                <span className="text-lg text-muted-foreground line-through">
+                                  {formatPrice(selectedProduct.originalPrice)}
+                                </span>
+                                <span className="text-3xl font-bold text-foreground">
+                                  {formatPrice(selectedProduct.price)}
+                                </span>
+                              </div>
+                              
+                              <div className="mb-4">
+                                <Badge variant={selectedProduct.inStock ? "default" : "destructive"}>
+                                  {selectedProduct.inStock ? 'In Stock' : 'Out of Stock'}
+                                </Badge>
+                              </div>
+                              
+                              <Button 
+                                className="w-full mb-4"
+                                disabled={!selectedProduct.inStock}
+                                onClick={() => handleBuyClick(selectedProduct.name)}
+                              >
+                                Buy Now
+                              </Button>
+                              
+                              <div className="space-y-2">
+                                <p className="text-sm text-muted-foreground text-center">Also available at:</p>
+                                <div className="grid grid-cols-2 gap-2">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    className="text-xs"
+                                    onClick={() => handleMarketplaceClick(selectedProduct.name, 'Tokopedia')}
+                                  >
+                                    <img src="https://images.tokopedia.net/img/tokopedia-logo.png" alt="Tokopedia" className="w-4 h-4 mr-1" />
+                                    Tokopedia
+                                  </Button>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    className="text-xs"
+                                    onClick={() => handleMarketplaceClick(selectedProduct.name, 'Shopee')}
+                                  >
+                                    <img src="https://logos-world.net/wp-content/uploads/2020/11/Shopee-Logo.png" alt="Shopee" className="w-4 h-4 mr-1" />
+                                    Shopee
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {/* Description */}
+                            <div>
+                              <h3 className="text-lg font-semibold mb-2">Description</h3>
+                              <p className="text-muted-foreground">{selectedProduct.description}</p>
+                            </div>
+                            
+                            {/* Specifications */}
+                            <div>
+                              <h3 className="text-lg font-semibold mb-2">Specifications</h3>
+                              <div className="space-y-2">
+                                {Object.entries(selectedProduct.specifications).map(([key, value]) => (
+                                  <div key={key} className="flex justify-between py-1 border-b border-border/50">
+                                    <span className="font-medium">{key}:</span>
+                                    <span className="text-muted-foreground">{value}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </DialogContent>
+                  </Dialog>
+                  
                   <div className="p-6">
                     <h3 className="text-xl font-semibold text-foreground mb-3">
                       {product.name}
                     </h3>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-2xl font-bold text-foreground">
-                          {product.price}
+                    <div className="space-y-3">
+                      {/* Price Section - moved original price above current price */}
+                      <div className="flex flex-col">
+                        <span className="text-sm text-muted-foreground line-through">
+                          {formatPrice(product.originalPrice)}
                         </span>
-                        <span className="text-lg text-muted-foreground line-through">
-                          {product.originalPrice}
+                        <span className="text-xl font-bold text-foreground">
+                          {formatPrice(product.price)}
                         </span>
                       </div>
-                    </div>
-                    <div className="flex items-center justify-between">
+                      
+                      {/* Stock Status */}
                       <div className="flex items-center">
                         <span className={`text-sm font-medium px-2 py-1 rounded ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                           {product.inStock ? 'In Stock' : 'Out of Stock'}
                         </span>
                       </div>
+                      
+                      {/* Buy Button */}
                       <Button 
                         size="sm" 
-                        className="ml-4"
+                        className="w-full"
                         disabled={!product.inStock}
                         onClick={() => handleBuyClick(product.name)}
                       >
-                        Buy
+                        Buy Now
                       </Button>
+                      
+                      {/* Marketplace Buttons */}
+                      <div className="space-y-2">
+                        <p className="text-sm text-muted-foreground text-center">Also available at:</p>
+                        <div className="grid grid-cols-2 gap-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="text-xs h-8"
+                            onClick={() => handleMarketplaceClick(product.name, 'Tokopedia')}
+                          >
+                            <img src="https://images.tokopedia.net/img/tokopedia-logo.png" alt="Tokopedia" className="w-3 h-3 mr-1" />
+                            Tokopedia
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="text-xs h-8"
+                            onClick={() => handleMarketplaceClick(product.name, 'Shopee')}
+                          >
+                            <img src="https://logos-world.net/wp-content/uploads/2020/11/Shopee-Logo.png" alt="Shopee" className="w-3 h-3 mr-1" />
+                            Shopee
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -301,10 +544,14 @@ const Index = () => {
               <Card 
                 key={marketplace.name} 
                 className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-                onClick={() => handleMarketplaceClick(marketplace.url)}
+                onClick={() => window.open(marketplace.url, '_blank')}
               >
                 <CardContent className="p-8 text-center">
-                  <div className="text-4xl mb-4">{marketplace.logo}</div>
+                  <img 
+                    src={marketplace.logo} 
+                    alt={marketplace.name}
+                    className="h-12 w-auto mx-auto mb-4 object-contain"
+                  />
                   <h3 className="text-xl font-semibold">{marketplace.name}</h3>
                 </CardContent>
               </Card>

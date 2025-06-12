@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ShoppingBag, Filter, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -702,14 +703,14 @@ const Catalog = () => {
                         </h3>
                         
                         <div className="flex-grow flex flex-col justify-end space-y-4">
-                          {/* Price Section */}
-                          <div className="space-y-2">
-                            <div className="flex items-center space-x-2">
+                          {/* Price Section - moved original price above current price */}
+                          <div className="space-y-1">
+                            <div className="flex flex-col">
+                              <span className="text-sm text-muted-foreground line-through">
+                                {formatPrice(product.originalPrice)}
+                              </span>
                               <span className="text-xl font-bold text-foreground">
                                 {formatPrice(product.price)}
-                              </span>
-                              <span className="text-lg text-muted-foreground line-through">
-                                {formatPrice(product.originalPrice)}
                               </span>
                             </div>
                           </div>
@@ -745,7 +746,8 @@ const Catalog = () => {
                                 className="text-xs h-8"
                                 onClick={() => handleMarketplaceClick(product.name, 'Tokopedia')}
                               >
-                                🟢 Tokopedia
+                                <img src="https://images.tokopedia.net/img/tokopedia-logo.png" alt="Tokopedia" className="w-3 h-3 mr-1" />
+                                Tokopedia
                               </Button>
                               <Button 
                                 variant="outline" 
@@ -753,7 +755,8 @@ const Catalog = () => {
                                 className="text-xs h-8"
                                 onClick={() => handleMarketplaceClick(product.name, 'Shopee')}
                               >
-                                🟠 Shopee
+                                <img src="https://logos-world.net/wp-content/uploads/2020/11/Shopee-Logo.png" alt="Shopee" className="w-3 h-3 mr-1" />
+                                Shopee
                               </Button>
                             </div>
                           </div>
