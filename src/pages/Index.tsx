@@ -1,4 +1,3 @@
-
 import { ShoppingBag, Shield, Truck, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -475,20 +474,20 @@ const Index = () => {
                           <Button 
                             variant="outline" 
                             size="sm"
-                            className="text-sm h-10 px-2"
+                            className="text-sm h-10 px-2 flex items-center justify-center"
                             onClick={() => handleMarketplaceClick(product.name, 'Tokopedia')}
                           >
-                            <img src="/lovable-uploads/ecc6a3c5-f7ab-48ab-b6ae-d9160c317aa6.png" alt="Tokopedia" className="w-4 h-4 mr-1" />
-                            Tokopedia
+                            <img src="/lovable-uploads/ecc6a3c5-f7ab-48ab-b6ae-d9160c317aa6.png" alt="Tokopedia" className="w-4 h-4 mr-1 flex-shrink-0" />
+                            <span className="truncate">Tokopedia</span>
                           </Button>
                           <Button 
                             variant="outline" 
                             size="sm"
-                            className="text-sm h-10 px-2"
+                            className="text-sm h-10 px-2 flex items-center justify-center"
                             onClick={() => handleMarketplaceClick(product.name, 'Shopee')}
                           >
-                            <img src="/lovable-uploads/eb83872b-9662-4acb-b949-33bf73d2991a.png" alt="Shopee" className="w-4 h-4 mr-1" />
-                            Shopee
+                            <img src="/lovable-uploads/eb83872b-9662-4acb-b949-33bf73d2991a.png" alt="Shopee" className="w-4 h-4 mr-1 flex-shrink-0" />
+                            <span className="truncate">Shopee</span>
                           </Button>
                         </div>
                       </div>
