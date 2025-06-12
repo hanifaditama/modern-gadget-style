@@ -1,27 +1,13 @@
 import { useState } from "react";
-import { ShoppingBag, Filter, X, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
+import { Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router-dom";
-import { 
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Navigation } from "@/components/catalog/Navigation";
+import { CategoryFilter } from "@/components/catalog/CategoryFilter";
+import { PriceFilter } from "@/components/catalog/PriceFilter";
+import { ProductCard } from "@/components/catalog/ProductCard";
+import { ProductDialog } from "@/components/catalog/ProductDialog";
+import { Product, Category } from "@/types/catalog";
 
 const Catalog = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -30,11 +16,10 @@ const Catalog = () => {
   const [minPrice, setMinPrice] = useState<string>("0");
   const [maxPrice, setMaxPrice] = useState<string>("50000000");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [openCategories, setOpenCategories] = useState<string[]>([]);
 
-  const categories = [
+  const categories: Category[] = [
     { 
       id: "all", 
       name: "All Products",
@@ -87,7 +72,7 @@ const Catalog = () => {
     }
   ];
 
-  const allProducts = [
+  const allProducts: Product[] = [
     {
       id: 1,
       name: "MacBook Pro 16-inch",
@@ -354,22 +339,6 @@ const Catalog = () => {
     setSelectedSubcategory(subcategoryId || "all");
   };
 
-  const nextImage = () => {
-    if (selectedProduct) {
-      setCurrentImageIndex((prev) => 
-        prev === selectedProduct.images.length - 1 ? 0 : prev + 1
-      );
-    }
-  };
-
-  const prevImage = () => {
-    if (selectedProduct) {
-      setCurrentImageIndex((prev) => 
-        prev === 0 ? selectedProduct.images.length - 1 : prev - 1
-      );
-    }
-  };
-
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
@@ -378,149 +347,20 @@ const Catalog = () => {
     }).format(price);
   };
 
-  const CategoryFilter = ({ isMobile = false }) => (
-    <div className="space-y-2">
-      <Button
-        variant={selectedCategory === "all" ? "default" : "outline"}
-        size="sm"
-        className="justify-start text-xs px-3 py-2 h-auto w-full"
-        onClick={() => handleCategorySelect("all")}
-      >
-        All Products
-      </Button>
-      
-      {categories.slice(1).map((category) => (
-        <div key={category.id}>
-          {category.subcategories.length > 0 ? (
-            <Collapsible 
-              open={openCategories.includes(category.id)}
-              onOpenChange={() => toggleCategory(category.id)}
-            >
-              <CollapsibleTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="justify-between text-xs px-3 py-2 h-auto w-full"
-                >
-                  {category.name}
-                  <ChevronDown 
-                    className={`h-3 w-3 transition-transform ${
-                      openCategories.includes(category.id) ? 'rotate-180' : ''
-                    }`}
-                  />
-                </Button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="mt-1 ml-3 space-y-1">
-                <Button
-                  variant={selectedCategory === category.id && selectedSubcategory === "all" ? "default" : "ghost"}
-                  size="sm"
-                  className="justify-start text-xs px-3 py-1 h-auto w-full"
-                  onClick={() => handleCategorySelect(category.id, "all")}
-                >
-                  All {category.name}
-                </Button>
-                {category.subcategories.map((subcategory) => (
-                  <Button
-                    key={subcategory.id}
-                    variant={
-                      selectedCategory === category.id && selectedSubcategory === subcategory.id 
-                        ? "default" 
-                        : "ghost"
-                    }
-                    size="sm"
-                    className="justify-start text-xs px-3 py-1 h-auto w-full"
-                    onClick={() => handleCategorySelect(category.id, subcategory.id)}
-                  >
-                    {subcategory.name}
-                  </Button>
-                ))}
-              </CollapsibleContent>
-            </Collapsible>
-          ) : (
-            <Button
-              variant={selectedCategory === category.id ? "default" : "outline"}
-              size="sm"
-              className="justify-start text-xs px-3 py-2 h-auto w-full"
-              onClick={() => handleCategorySelect(category.id)}
-            >
-              {category.name}
-            </Button>
-          )}
-        </div>
-      ))}
-    </div>
-  );
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+  };
 
-  const Navigation = () => (
-    <nav className="border-b border-border bg-card/50 backdrop-blur-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-2">
-            <Link to="/" className="flex items-center space-x-2">
-              <ShoppingBag className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold text-foreground">TechHub</span>
-            </Link>
-          </div>
-          
-          <div className="hidden md:flex items-center">
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <Link to="/">
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Home
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                
-                <NavigationMenuItem>
-                  <Link to="/catalog">
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Products
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-[200px] p-2">
-                      {categories.slice(1).map((category) => (
-                        <Link 
-                          key={category.id}
-                          to={`/catalog?category=${category.id}`}
-                          className="block px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-                          onClick={() => setSelectedCategory(category.id)}
-                        >
-                          {category.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-                
-                <NavigationMenuItem>
-                  <Link to="/about">
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      About Us
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
-          
-          <Button variant="outline" size="sm" asChild>
-            <Link to="/contact">Contact Us</Link>
-          </Button>
-        </div>
-      </div>
-    </nav>
-  );
+  const handleDialogClose = () => {
+    setSelectedProduct(null);
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      <Navigation 
+        categories={categories}
+        onCategorySelect={setSelectedCategory}
+      />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
@@ -551,50 +391,29 @@ const Catalog = () => {
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-sm font-medium mb-3">Categories</h3>
-                    <CategoryFilter isMobile={true} />
+                    <CategoryFilter
+                      categories={categories}
+                      selectedCategory={selectedCategory}
+                      selectedSubcategory={selectedSubcategory}
+                      openCategories={openCategories}
+                      onCategorySelect={handleCategorySelect}
+                      onToggleCategory={toggleCategory}
+                      isMobile={true}
+                    />
                   </div>
                   
                   <div>
                     <h3 className="text-sm font-medium mb-3">Price Range</h3>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-2">
-                        <div>
-                          <label className="text-xs text-muted-foreground">Min Price</label>
-                          <Input
-                            type="number"
-                            value={minPrice}
-                            onChange={(e) => setMinPrice(e.target.value)}
-                            onBlur={handlePriceInputChange}
-                            placeholder="Min"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-xs text-muted-foreground">Max Price</label>
-                          <Input
-                            type="number"
-                            value={maxPrice}
-                            onChange={(e) => setMaxPrice(e.target.value)}
-                            onBlur={handlePriceInputChange}
-                            placeholder="Max"
-                          />
-                        </div>
-                      </div>
-                      <Slider
-                        defaultValue={[0, 50000000]}
-                        max={50000000}
-                        step={100000}
-                        value={priceRange}
-                        onValueChange={(value) => {
-                          setPriceRange(value);
-                          setMinPrice(value[0].toString());
-                          setMaxPrice(value[1].toString());
-                        }}
-                      />
-                      <div className="flex items-center justify-between text-sm text-muted-foreground">
-                        <span>{formatPrice(priceRange[0])}</span>
-                        <span>{formatPrice(priceRange[1])}</span>
-                      </div>
-                    </div>
+                    <PriceFilter
+                      priceRange={priceRange}
+                      minPrice={minPrice}
+                      maxPrice={maxPrice}
+                      onPriceRangeChange={setPriceRange}
+                      onMinPriceChange={setMinPrice}
+                      onMaxPriceChange={setMaxPrice}
+                      onPriceInputChange={handlePriceInputChange}
+                      formatPrice={formatPrice}
+                    />
                   </div>
                 </div>
               </div>
@@ -607,52 +426,30 @@ const Catalog = () => {
               <div className="border rounded-lg p-4 space-y-6">
                 <div>
                   <h3 className="text-lg font-medium mb-3">Categories</h3>
-                  <CategoryFilter />
+                  <CategoryFilter
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    selectedSubcategory={selectedSubcategory}
+                    openCategories={openCategories}
+                    onCategorySelect={handleCategorySelect}
+                    onToggleCategory={toggleCategory}
+                  />
                 </div>
                 
                 <Separator />
                 
                 <div>
                   <h3 className="text-lg font-medium mb-3">Price Range</h3>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <label className="text-xs text-muted-foreground">Min Price</label>
-                        <Input
-                          type="number"
-                          value={minPrice}
-                          onChange={(e) => setMinPrice(e.target.value)}
-                          onBlur={handlePriceInputChange}
-                          placeholder="Min"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-muted-foreground">Max Price</label>
-                        <Input
-                          type="number"
-                          value={maxPrice}
-                          onChange={(e) => setMaxPrice(e.target.value)}
-                          onBlur={handlePriceInputChange}
-                          placeholder="Max"
-                        />
-                      </div>
-                    </div>
-                    <Slider
-                      defaultValue={[0, 50000000]}
-                      max={50000000}
-                      step={100000}
-                      value={priceRange}
-                      onValueChange={(value) => {
-                        setPriceRange(value);
-                        setMinPrice(value[0].toString());
-                        setMaxPrice(value[1].toString());
-                      }}
-                    />
-                    <div className="flex items-center justify-between text-sm text-muted-foreground">
-                      <span>{formatPrice(priceRange[0])}</span>
-                      <span>{formatPrice(priceRange[1])}</span>
-                    </div>
-                  </div>
+                  <PriceFilter
+                    priceRange={priceRange}
+                    minPrice={minPrice}
+                    maxPrice={maxPrice}
+                    onPriceRangeChange={setPriceRange}
+                    onMinPriceChange={setMinPrice}
+                    onMaxPriceChange={setMaxPrice}
+                    onPriceInputChange={handlePriceInputChange}
+                    formatPrice={formatPrice}
+                  />
                 </div>
               </div>
             </div>
@@ -663,230 +460,14 @@ const Catalog = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => (
-                  <Card key={product.id} className="group cursor-pointer border-border hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <CardContent className="p-0">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <div 
-                            className="relative overflow-hidden rounded-t-lg cursor-pointer"
-                            onClick={() => {
-                              setSelectedProduct(product);
-                              setCurrentImageIndex(0);
-                            }}
-                          >
-                            <img 
-                              src={product.images[0]} 
-                              alt={product.name}
-                              className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                            />
-                            {product.badge && (
-                              <div className="absolute top-4 left-4">
-                                <Badge className="bg-primary text-primary-foreground">
-                                  {product.badge}
-                                </Badge>
-                              </div>
-                            )}
-                          </div>
-                        </DialogTrigger>
-                        
-                        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                          <DialogHeader>
-                            <DialogTitle className="text-2xl font-bold">{selectedProduct?.name}</DialogTitle>
-                          </DialogHeader>
-                          
-                          {selectedProduct && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                              {/* Image Carousel */}
-                              <div className="relative">
-                                <div className="relative overflow-hidden rounded-lg">
-                                  <img 
-                                    src={selectedProduct.images[currentImageIndex]} 
-                                    alt={selectedProduct.name}
-                                    className="w-full h-96 object-cover"
-                                  />
-                                  
-                                  {selectedProduct.images.length > 1 && (
-                                    <>
-                                      <Button
-                                        variant="outline"
-                                        size="icon"
-                                        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white"
-                                        onClick={prevImage}
-                                      >
-                                        <ChevronLeft className="h-4 w-4" />
-                                      </Button>
-                                      <Button
-                                        variant="outline"
-                                        size="icon"
-                                        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white"
-                                        onClick={nextImage}
-                                      >
-                                        <ChevronRight className="h-4 w-4" />
-                                      </Button>
-                                    </>
-                                  )}
-                                </div>
-                                
-                                {/* Image Thumbnails */}
-                                {selectedProduct.images.length > 1 && (
-                                  <div className="flex gap-2 mt-4 overflow-x-auto">
-                                    {selectedProduct.images.map((image, index) => (
-                                      <img
-                                        key={index}
-                                        src={image}
-                                        alt={`${selectedProduct.name} ${index + 1}`}
-                                        className={`w-16 h-16 object-cover rounded cursor-pointer border-2 ${
-                                          index === currentImageIndex ? 'border-primary' : 'border-gray-200'
-                                        }`}
-                                        onClick={() => setCurrentImageIndex(index)}
-                                      />
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                              
-                              {/* Product Details */}
-                              <div className="space-y-6">
-                                <div>
-                                  <div className="flex flex-col space-y-1 mb-4">
-                                    <span className="text-sm text-muted-foreground line-through">
-                                      {formatPrice(selectedProduct.originalPrice)}
-                                    </span>
-                                    <span className="text-xl font-bold text-foreground">
-                                      {formatPrice(selectedProduct.price)}
-                                    </span>
-                                  </div>
-                                  
-                                  <div className="mb-4">
-                                    <Badge variant={selectedProduct.inStock ? "default" : "destructive"}>
-                                      {selectedProduct.inStock ? 'In Stock' : 'Out of Stock'}
-                                    </Badge>
-                                  </div>
-                                  
-                                  <Button 
-                                    className="w-full mb-4"
-                                    disabled={!selectedProduct.inStock}
-                                    onClick={() => handleBuyClick(selectedProduct.name)}
-                                  >
-                                    Buy Now
-                                  </Button>
-                                  
-                                  <div className="space-y-2">
-                                    <p className="text-sm text-muted-foreground text-center">Also available at:</p>
-                                    <div className="grid grid-cols-2 gap-2">
-                                      <Button 
-                                        variant="outline" 
-                                        size="sm"
-                                        className="text-xs"
-                                        onClick={() => handleMarketplaceClick(selectedProduct.name, 'Tokopedia')}
-                                      >
-                                        <img src="/lovable-uploads/ecc6a3c5-f7ab-48ab-b6ae-d9160c317aa6.png" alt="Tokopedia" className="w-4 h-4 mr-1" />
-                                        Tokopedia
-                                      </Button>
-                                      <Button 
-                                        variant="outline" 
-                                        size="sm"
-                                        className="text-xs"
-                                        onClick={() => handleMarketplaceClick(selectedProduct.name, 'Shopee')}
-                                      >
-                                        <img src="/lovable-uploads/eb83872b-9662-4acb-b949-33bf73d2991a.png" alt="Shopee" className="w-4 h-4 mr-1" />
-                                        Shopee
-                                      </Button>
-                                    </div>
-                                  </div>
-                                </div>
-                                
-                                {/* Description */}
-                                <div>
-                                  <h3 className="text-lg font-semibold mb-2">Description</h3>
-                                  <p className="text-muted-foreground">{selectedProduct.description}</p>
-                                </div>
-                                
-                                {/* Specifications */}
-                                <div>
-                                  <h3 className="text-lg font-semibold mb-2">Specifications</h3>
-                                  <div className="space-y-2">
-                                    {Object.entries(selectedProduct.specifications).map(([key, value]) => (
-                                      <div key={key} className="flex justify-between py-1 border-b border-border/50">
-                                        <span className="font-medium">{key}:</span>
-                                        <span className="text-muted-foreground">{String(value)}</span>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </DialogContent>
-                      </Dialog>
-                      
-                      <div className="p-6 h-[380px] flex flex-col">
-                        <h3 className="text-xl font-semibold text-foreground mb-4 flex-grow-0">
-                          {product.name}
-                        </h3>
-                        
-                        <div className="flex-grow flex flex-col justify-end space-y-4">
-                          {/* Price Section - moved original price above current price */}
-                          <div className="space-y-1">
-                            <div className="flex flex-col">
-                              <span className="text-sm text-muted-foreground line-through">
-                                {formatPrice(product.originalPrice)}
-                              </span>
-                              <span className="text-xl font-bold text-foreground">
-                                {formatPrice(product.price)}
-                              </span>
-                            </div>
-                          </div>
-                          
-                          {/* Stock Status */}
-                          <div>
-                            <Badge 
-                              variant={product.inStock ? "default" : "destructive"}
-                              className="w-full justify-center py-2"
-                            >
-                              {product.inStock ? 'In Stock' : 'Out of Stock'}
-                            </Badge>
-                          </div>
-                          
-                          {/* Buy Button */}
-                          <div>
-                            <Button 
-                              className="w-full"
-                              disabled={!product.inStock}
-                              onClick={() => handleBuyClick(product.name)}
-                            >
-                              Buy Now
-                            </Button>
-                          </div>
-                          
-                          {/* Marketplace Buttons */}
-                          <div className="space-y-2">
-                            <p className="text-sm text-muted-foreground text-center">Also available at:</p>
-                            <div className="grid grid-cols-2 gap-2">
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                className="text-xs h-8"
-                                onClick={() => handleMarketplaceClick(product.name, 'Tokopedia')}
-                              >
-                                <img src="/lovable-uploads/ecc6a3c5-f7ab-48ab-b6ae-d9160c317aa6.png" alt="Tokopedia" className="w-3 h-3 mr-1" />
-                                Tokopedia
-                              </Button>
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                className="text-xs h-8"
-                                onClick={() => handleMarketplaceClick(product.name, 'Shopee')}
-                              >
-                                <img src="/lovable-uploads/eb83872b-9662-4acb-b949-33bf73d2991a.png" alt="Shopee" className="w-3 h-3 mr-1" />
-                                Shopee
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onProductClick={handleProductClick}
+                    onBuyClick={handleBuyClick}
+                    onMarketplaceClick={handleMarketplaceClick}
+                    formatPrice={formatPrice}
+                  />
                 ))
               ) : (
                 <div className="col-span-3 py-12 text-center">
@@ -910,6 +491,15 @@ const Catalog = () => {
           </div>
         </div>
       </div>
+
+      <ProductDialog
+        product={selectedProduct}
+        isOpen={!!selectedProduct}
+        onClose={handleDialogClose}
+        onBuyClick={handleBuyClick}
+        onMarketplaceClick={handleMarketplaceClick}
+        formatPrice={formatPrice}
+      />
     </div>
   );
 };
