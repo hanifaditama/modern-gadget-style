@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ShoppingBag, Filter, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -392,7 +391,7 @@ const Catalog = () => {
         </div>
         
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Filters - Mobile */}
+          {/* Mobile Filters */}
           {mobileFiltersOpen && (
             <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 md:hidden">
               <div className="fixed inset-y-0 right-0 w-full max-w-xs bg-background p-6 shadow-lg">
@@ -412,7 +411,7 @@ const Catalog = () => {
                           key={category.id}
                           variant={selectedCategory === category.id ? "default" : "outline"}
                           size="sm"
-                          className="justify-start"
+                          className="justify-start text-xs px-3 py-2 h-auto"
                           onClick={() => setSelectedCategory(category.id)}
                         >
                           {category.name}
@@ -468,7 +467,7 @@ const Catalog = () => {
             </div>
           )}
           
-          {/* Filters - Desktop */}
+          {/* Desktop Filters */}
           <div className="hidden md:block w-64 flex-shrink-0">
             <div className="sticky top-24">
               <div className="border rounded-lg p-4 space-y-6">
@@ -480,7 +479,7 @@ const Catalog = () => {
                         key={category.id}
                         variant={selectedCategory === category.id ? "default" : "outline"}
                         size="sm"
-                        className="justify-start"
+                        className="justify-start text-xs px-3 py-2 h-auto"
                         onClick={() => setSelectedCategory(category.id)}
                       >
                         {category.name}
@@ -554,7 +553,7 @@ const Catalog = () => {
                             }}
                           >
                             <img 
-                              src={product.images ? product.images[0] : product.image} 
+                              src={product.images[0]} 
                               alt={product.name}
                               className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                             />
@@ -627,12 +626,12 @@ const Catalog = () => {
                               {/* Product Details */}
                               <div className="space-y-6">
                                 <div>
-                                  <div className="flex items-center space-x-3 mb-4">
-                                    <span className="text-3xl font-bold text-foreground">
-                                      {formatPrice(selectedProduct.price)}
-                                    </span>
-                                    <span className="text-xl text-muted-foreground line-through">
+                                  <div className="flex flex-col space-y-1 mb-4">
+                                    <span className="text-sm text-muted-foreground line-through">
                                       {formatPrice(selectedProduct.originalPrice)}
+                                    </span>
+                                    <span className="text-xl font-bold text-foreground">
+                                      {formatPrice(selectedProduct.price)}
                                     </span>
                                   </div>
                                   
@@ -659,7 +658,8 @@ const Catalog = () => {
                                         className="text-xs"
                                         onClick={() => handleMarketplaceClick(selectedProduct.name, 'Tokopedia')}
                                       >
-                                        🟢 Tokopedia
+                                        <img src="https://images.tokopedia.net/img/tokopedia-logo.png" alt="Tokopedia" className="w-4 h-4 mr-1" />
+                                        Tokopedia
                                       </Button>
                                       <Button 
                                         variant="outline" 
@@ -667,7 +667,8 @@ const Catalog = () => {
                                         className="text-xs"
                                         onClick={() => handleMarketplaceClick(selectedProduct.name, 'Shopee')}
                                       >
-                                        🟠 Shopee
+                                        <img src="https://logos-world.net/wp-content/uploads/2020/11/Shopee-Logo.png" alt="Shopee" className="w-4 h-4 mr-1" />
+                                        Shopee
                                       </Button>
                                     </div>
                                   </div>
@@ -686,7 +687,7 @@ const Catalog = () => {
                                     {Object.entries(selectedProduct.specifications).map(([key, value]) => (
                                       <div key={key} className="flex justify-between py-1 border-b border-border/50">
                                         <span className="font-medium">{key}:</span>
-                                        <span className="text-muted-foreground">{value}</span>
+                                        <span className="text-muted-foreground">{String(value)}</span>
                                       </div>
                                     ))}
                                   </div>

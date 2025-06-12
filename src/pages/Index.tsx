@@ -424,7 +424,7 @@ const Index = () => {
                                 {Object.entries(selectedProduct.specifications).map(([key, value]) => (
                                   <div key={key} className="flex justify-between py-1 border-b border-border/50">
                                     <span className="font-medium">{key}:</span>
-                                    <span className="text-muted-foreground">{value}</span>
+                                    <span className="text-muted-foreground">{String(value)}</span>
                                   </div>
                                 ))}
                               </div>
