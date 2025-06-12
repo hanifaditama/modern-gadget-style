@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShoppingBag, Filter, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ShoppingBag, Filter, X, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
@@ -17,23 +17,74 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Separator } from "@/components/ui/separator";
+import { 
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 const Catalog = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>("all");
   const [priceRange, setPriceRange] = useState<number[]>([0, 50000000]);
   const [minPrice, setMinPrice] = useState<string>("0");
   const [maxPrice, setMaxPrice] = useState<string>("50000000");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [openCategories, setOpenCategories] = useState<string[]>([]);
 
   const categories = [
-    { id: "all", name: "All Products" },
-    { id: "macbook", name: "MacBooks" },
-    { id: "iphone", name: "iPhones" },
-    { id: "windows", name: "Windows Laptops" },
-    { id: "gaming", name: "Gaming Laptops" },
-    { id: "office", name: "Office Laptops" }
+    { 
+      id: "all", 
+      name: "All Products",
+      subcategories: []
+    },
+    { 
+      id: "macbook", 
+      name: "MacBooks",
+      subcategories: [
+        { id: "macbook-air", name: "MacBook Air" },
+        { id: "macbook-pro", name: "MacBook Pro" }
+      ]
+    },
+    { 
+      id: "iphone", 
+      name: "iPhones",
+      subcategories: [
+        { id: "iphone-15", name: "iPhone 15 Series" },
+        { id: "iphone-14", name: "iPhone 14 Series" },
+        { id: "iphone-13", name: "iPhone 13 Series" }
+      ]
+    },
+    { 
+      id: "windows", 
+      name: "Windows Laptops",
+      subcategories: [
+        { id: "intel-i3", name: "Intel i3" },
+        { id: "intel-i5", name: "Intel i5" },
+        { id: "intel-i7", name: "Intel i7" },
+        { id: "intel-i9", name: "Intel i9" }
+      ]
+    },
+    { 
+      id: "gaming", 
+      name: "Gaming Laptops",
+      subcategories: [
+        { id: "asus-rog", name: "ASUS ROG" },
+        { id: "razer", name: "Razer" },
+        { id: "msi", name: "MSI" }
+      ]
+    },
+    { 
+      id: "office", 
+      name: "Office Laptops",
+      subcategories: [
+        { id: "dell", name: "Dell" },
+        { id: "lenovo", name: "Lenovo" },
+        { id: "hp", name: "HP" }
+      ]
+    }
   ];
 
   const allProducts = [
@@ -49,6 +100,7 @@ const Catalog = () => {
       ],
       badge: "Best Seller",
       category: "macbook",
+      subcategory: "macbook-pro",
       inStock: true,
       description: "The most powerful MacBook Pro ever. With the blazing-fast M2 Pro or M2 Max chip — along with up to 22 hours of battery life — MacBook Pro enables creatives, developers, and entrepreneurs to push the boundaries of what's possible.",
       specifications: {
@@ -73,6 +125,7 @@ const Catalog = () => {
       ],
       badge: "New",
       category: "iphone",
+      subcategory: "iphone-15",
       inStock: true,
       description: "iPhone 15 Pro. Forged in titanium and featuring the groundbreaking A17 Pro chip, a customizable Action Button, and the most powerful iPhone camera system ever.",
       specifications: {
@@ -97,6 +150,7 @@ const Catalog = () => {
       ],
       badge: "Sale",
       category: "windows",
+      subcategory: "intel-i7",
       inStock: false,
       description: "The Surface Laptop Studio is a versatile device designed for creators and professionals, featuring a unique hinge design and powerful performance.",
       specifications: {
@@ -121,6 +175,7 @@ const Catalog = () => {
       ],
       badge: "Gaming",
       category: "gaming",
+      subcategory: "asus-rog",
       inStock: true,
       description: "ASUS ROG Zephyrus is a high-performance gaming laptop with powerful graphics and a sleek design, perfect for gamers and content creators.",
       specifications: {
@@ -145,6 +200,7 @@ const Catalog = () => {
       ],
       badge: "",
       category: "iphone",
+      subcategory: "iphone-14",
       inStock: true,
       description: "The iPhone 14 features advanced dual-camera system, improved battery life, and powerful A15 Bionic chip for smooth performance.",
       specifications: {
@@ -169,6 +225,7 @@ const Catalog = () => {
       ],
       badge: "Office",
       category: "office",
+      subcategory: "dell",
       inStock: false,
       description: "Dell XPS 13 is a premium ultrabook with a stunning display, powerful performance, and sleek design for professionals on the go.",
       specifications: {
@@ -193,6 +250,7 @@ const Catalog = () => {
       ],
       badge: "Popular",
       category: "macbook",
+      subcategory: "macbook-air",
       inStock: true,
       description: "MacBook Air with M2 chip delivers incredible performance and battery life in a thin and light design, perfect for everyday use.",
       specifications: {
@@ -217,6 +275,7 @@ const Catalog = () => {
       ],
       badge: "Office",
       category: "office",
+      subcategory: "lenovo",
       inStock: true,
       description: "Lenovo ThinkPad X1 is a durable and powerful business laptop with excellent keyboard and security features.",
       specifications: {
@@ -241,6 +300,7 @@ const Catalog = () => {
       ],
       badge: "Gaming",
       category: "gaming",
+      subcategory: "razer",
       inStock: true,
       description: "Razer Blade 15 is a high-end gaming laptop with powerful specs, sleek design, and customizable RGB lighting.",
       specifications: {
@@ -255,11 +315,12 @@ const Catalog = () => {
     }
   ];
 
-  // Filter products by category and price
+  // Filter products by category, subcategory and price
   const filteredProducts = allProducts.filter(product => {
     const categoryMatch = selectedCategory === "all" || product.category === selectedCategory;
+    const subcategoryMatch = selectedSubcategory === "all" || product.subcategory === selectedSubcategory;
     const priceMatch = product.price >= priceRange[0] && product.price <= priceRange[1];
-    return categoryMatch && priceMatch;
+    return categoryMatch && subcategoryMatch && priceMatch;
   });
 
   const handleBuyClick = (productName: string) => {
@@ -280,7 +341,116 @@ const Catalog = () => {
     setPriceRange([min, max]);
   };
 
-  // Create a Navigation component
+  const toggleCategory = (categoryId: string) => {
+    setOpenCategories(prev => 
+      prev.includes(categoryId) 
+        ? prev.filter(id => id !== categoryId)
+        : [...prev, categoryId]
+    );
+  };
+
+  const handleCategorySelect = (categoryId: string, subcategoryId?: string) => {
+    setSelectedCategory(categoryId);
+    setSelectedSubcategory(subcategoryId || "all");
+  };
+
+  const nextImage = () => {
+    if (selectedProduct) {
+      setCurrentImageIndex((prev) => 
+        prev === selectedProduct.images.length - 1 ? 0 : prev + 1
+      );
+    }
+  };
+
+  const prevImage = () => {
+    if (selectedProduct) {
+      setCurrentImageIndex((prev) => 
+        prev === 0 ? selectedProduct.images.length - 1 : prev - 1
+      );
+    }
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    }).format(price);
+  };
+
+  const CategoryFilter = ({ isMobile = false }) => (
+    <div className="space-y-2">
+      <Button
+        variant={selectedCategory === "all" ? "default" : "outline"}
+        size="sm"
+        className="justify-start text-xs px-3 py-2 h-auto w-full"
+        onClick={() => handleCategorySelect("all")}
+      >
+        All Products
+      </Button>
+      
+      {categories.slice(1).map((category) => (
+        <div key={category.id}>
+          {category.subcategories.length > 0 ? (
+            <Collapsible 
+              open={openCategories.includes(category.id)}
+              onOpenChange={() => toggleCategory(category.id)}
+            >
+              <CollapsibleTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-between text-xs px-3 py-2 h-auto w-full"
+                >
+                  {category.name}
+                  <ChevronDown 
+                    className={`h-3 w-3 transition-transform ${
+                      openCategories.includes(category.id) ? 'rotate-180' : ''
+                    }`}
+                  />
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-1 ml-3 space-y-1">
+                <Button
+                  variant={selectedCategory === category.id && selectedSubcategory === "all" ? "default" : "ghost"}
+                  size="sm"
+                  className="justify-start text-xs px-3 py-1 h-auto w-full"
+                  onClick={() => handleCategorySelect(category.id, "all")}
+                >
+                  All {category.name}
+                </Button>
+                {category.subcategories.map((subcategory) => (
+                  <Button
+                    key={subcategory.id}
+                    variant={
+                      selectedCategory === category.id && selectedSubcategory === subcategory.id 
+                        ? "default" 
+                        : "ghost"
+                    }
+                    size="sm"
+                    className="justify-start text-xs px-3 py-1 h-auto w-full"
+                    onClick={() => handleCategorySelect(category.id, subcategory.id)}
+                  >
+                    {subcategory.name}
+                  </Button>
+                ))}
+              </CollapsibleContent>
+            </Collapsible>
+          ) : (
+            <Button
+              variant={selectedCategory === category.id ? "default" : "outline"}
+              size="sm"
+              className="justify-start text-xs px-3 py-2 h-auto w-full"
+              onClick={() => handleCategorySelect(category.id)}
+            >
+              {category.name}
+            </Button>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+
   const Navigation = () => (
     <nav className="border-b border-border bg-card/50 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -348,30 +518,6 @@ const Catalog = () => {
     </nav>
   );
 
-  const nextImage = () => {
-    if (selectedProduct) {
-      setCurrentImageIndex((prev) => 
-        prev === selectedProduct.images.length - 1 ? 0 : prev + 1
-      );
-    }
-  };
-
-  const prevImage = () => {
-    if (selectedProduct) {
-      setCurrentImageIndex((prev) => 
-        prev === 0 ? selectedProduct.images.length - 1 : prev - 1
-      );
-    }
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-    }).format(price);
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -405,19 +551,7 @@ const Catalog = () => {
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-sm font-medium mb-3">Categories</h3>
-                    <div className="grid grid-cols-1 gap-2">
-                      {categories.map((category) => (
-                        <Button
-                          key={category.id}
-                          variant={selectedCategory === category.id ? "default" : "outline"}
-                          size="sm"
-                          className="justify-start text-xs px-3 py-2 h-auto"
-                          onClick={() => setSelectedCategory(category.id)}
-                        >
-                          {category.name}
-                        </Button>
-                      ))}
-                    </div>
+                    <CategoryFilter isMobile={true} />
                   </div>
                   
                   <div>
@@ -473,19 +607,7 @@ const Catalog = () => {
               <div className="border rounded-lg p-4 space-y-6">
                 <div>
                   <h3 className="text-lg font-medium mb-3">Categories</h3>
-                  <div className="grid grid-cols-1 gap-2">
-                    {categories.map((category) => (
-                      <Button
-                        key={category.id}
-                        variant={selectedCategory === category.id ? "default" : "outline"}
-                        size="sm"
-                        className="justify-start text-xs px-3 py-2 h-auto"
-                        onClick={() => setSelectedCategory(category.id)}
-                      >
-                        {category.name}
-                      </Button>
-                    ))}
-                  </div>
+                  <CategoryFilter />
                 </div>
                 
                 <Separator />
@@ -658,7 +780,7 @@ const Catalog = () => {
                                         className="text-xs"
                                         onClick={() => handleMarketplaceClick(selectedProduct.name, 'Tokopedia')}
                                       >
-                                        <img src="https://images.tokopedia.net/img/tokopedia-logo.png" alt="Tokopedia" className="w-4 h-4 mr-1" />
+                                        <img src="/lovable-uploads/ecc6a3c5-f7ab-48ab-b6ae-d9160c317aa6.png" alt="Tokopedia" className="w-4 h-4 mr-1" />
                                         Tokopedia
                                       </Button>
                                       <Button 
@@ -667,7 +789,7 @@ const Catalog = () => {
                                         className="text-xs"
                                         onClick={() => handleMarketplaceClick(selectedProduct.name, 'Shopee')}
                                       >
-                                        <img src="https://logos-world.net/wp-content/uploads/2020/11/Shopee-Logo.png" alt="Shopee" className="w-4 h-4 mr-1" />
+                                        <img src="/lovable-uploads/eb83872b-9662-4acb-b949-33bf73d2991a.png" alt="Shopee" className="w-4 h-4 mr-1" />
                                         Shopee
                                       </Button>
                                     </div>
@@ -747,7 +869,7 @@ const Catalog = () => {
                                 className="text-xs h-8"
                                 onClick={() => handleMarketplaceClick(product.name, 'Tokopedia')}
                               >
-                                <img src="https://images.tokopedia.net/img/tokopedia-logo.png" alt="Tokopedia" className="w-3 h-3 mr-1" />
+                                <img src="/lovable-uploads/ecc6a3c5-f7ab-48ab-b6ae-d9160c317aa6.png" alt="Tokopedia" className="w-3 h-3 mr-1" />
                                 Tokopedia
                               </Button>
                               <Button 
@@ -756,7 +878,7 @@ const Catalog = () => {
                                 className="text-xs h-8"
                                 onClick={() => handleMarketplaceClick(product.name, 'Shopee')}
                               >
-                                <img src="https://logos-world.net/wp-content/uploads/2020/11/Shopee-Logo.png" alt="Shopee" className="w-3 h-3 mr-1" />
+                                <img src="/lovable-uploads/eb83872b-9662-4acb-b949-33bf73d2991a.png" alt="Shopee" className="w-3 h-3 mr-1" />
                                 Shopee
                               </Button>
                             </div>
@@ -774,6 +896,7 @@ const Catalog = () => {
                     className="mt-4" 
                     onClick={() => {
                       setSelectedCategory("all");
+                      setSelectedSubcategory("all");
                       setPriceRange([0, 50000000]);
                       setMinPrice("0");
                       setMaxPrice("50000000");
